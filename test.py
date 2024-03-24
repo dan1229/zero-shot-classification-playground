@@ -35,11 +35,12 @@ if __name__ == "__main__":
         for method in METHODS:
             print(f"\tMethod: {method}")
             if method == METHOD_SPECIALIZED_CATEGORIES:
+                print("\t\tSkipping method SPECIALIZED_CATEGORIES")
                 continue
             # Run main.py with the current method
             print(f"\t\tpython main.py --method={method} --url={url}")
             process = subprocess.Popen(
-                ["python", "main.py", f"--method={method}", "--url={url}"],
+                ["python", "main.py", f"--method={method}", f"--url={url}"],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
@@ -50,7 +51,7 @@ if __name__ == "__main__":
             score, time_elapsed = parse_output(output)
 
             # Extract category
-            category_line = [line for line in output.split("\n") if "Image URL" in line]
+            category_line = [line for line in output.split("\n") if "Category" in line]
             category = (
                 category_line[0].split(":")[-1].strip() if category_line else None
             )
@@ -74,3 +75,16 @@ if __name__ == "__main__":
             print(
                 f"Elapsed Time: {categories_times[category][max_score_method[0]]} seconds"
             )
+    # Print overall stats
+    print("\n=============================")
+    print("\nOverall Stats:")
+    for category, scores in categories_scores.items():
+        max_score = max(scores.values())
+        max_score_method = [
+            method for method, score in scores.items() if score == max_score
+        ]
+        print(f"\nCategory: {category}")
+        print(f"Highest Score: {max_score} (Method: {', '.join(max_score_method)})")
+        print(
+            f"Elapsed Time: {categories_times[category][max_score_method[0]]} seconds"
+        )

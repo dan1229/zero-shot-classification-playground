@@ -1,3 +1,4 @@
+from typing import Optional
 from transformers import pipeline
 from PIL import Image
 import requests
@@ -38,6 +39,10 @@ METHODS = [
     METHOD_COMBINE_ALL_TEXT_FILES,
     METHOD_USE_CATEGORY_NAMES,
 ]
+
+# Classifier pipeline
+model_name = "openai/clip-vit-large-patch14-336"
+classifier = pipeline("zero-shot-image-classification", model=model_name)
 
 
 # Function to get labels from file based on category
@@ -232,34 +237,28 @@ def method_use_category_names(image_to_classify: str, url: str) -> list:
 
 #
 # MAIN
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Zero-shot image classification")
-    parser.add_argument("--method", type=int, help=f"Method of processing ({METHODS})")
-    parser.add_argument("--url", type=str, help="URL of the image to classify")
-    parser.add_argument(
-        "--category",
-        type=str,
-        help=f"Category for specialized categories ({CATEGORIES})",
-    )
-    args = parser.parse_args()
+#
+def classify_image(
+    url: str, method: Optional[str] = None, category: Optional[str] = None
+) -> tuple[list, float]:
 
-    model_name = "openai/clip-vit-large-patch14-336"
-    classifier = pipeline("zero-shot-image-classification", model=model_name)
+    if method is None:
+        method = get_method(None)
+    if category is None and method == METHOD_SPECIALIZED_CATEGORIES:
+        category = get_category_argument(None)
 
-    method = get_method(args)
-    url = get_url_argument(args)
     image_to_classify = Image.open(requests.get(url, stream=True).raw)
 
     start_time = time.time()
 
     if method == METHOD_SPECIALIZED_CATEGORIES:
-        method_specialized_categories(image_to_classify, url)
+        scores = method_specialized_categories(image_to_classify, url)
     elif method == METHOD_ADD_DIFFERENT_CATEGORIES:
-        method_add_different_categories(image_to_classify, url)
+        scores = method_add_different_categories(image_to_classify, url)
     elif method == METHOD_COMBINE_ALL_TEXT_FILES:
-        method_combine_all_text_files(image_to_classify, url)
+        scores = method_combine_all_text_files(image_to_classify, url)
     elif method == METHOD_USE_CATEGORY_NAMES:
-        method_use_category_names(image_to_classify, url)
+        scores = method_use_category_names(image_to_classify, url)
     else:
         print(f"\nInvalid method selected - {method}\n\nPlease choose {METHODS}\n")
 
@@ -268,3 +267,20 @@ if __name__ == "__main__":
     print(f"Elapsed time: {elapsed_time} seconds")
     print(f"URL: {url}")
     print("")
+    return (scores, elapsed_time)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Zero-shot image classification")
+    parser.add_argument(
+        "--method", type=str, help=f"Method of processing ({', '.join(METHODS)})"
+    )
+    parser.add_argument("--url", type=str, help="URL of the image to classify")
+    parser.add_argument(
+        "--category",
+        type=str,
+        help=f"Category for specialized categories ({', '.join(CATEGORIES)})",
+    )
+    args = parser.parse_args()
+
+    classify_image(args.url, args.method, args.category)
