@@ -2,7 +2,7 @@ from transformers import pipeline
 from PIL import Image
 import requests
 
-# example.py
+# basic.py
 # Just an example for a basic Zero Shot Image Classification pipeline
 
 if __name__ == "__main__":
@@ -21,5 +21,4 @@ if __name__ == "__main__":
     print(f"Image URL:\n{url}\n")
     for obj in scores:
         print(f"{obj['label']}: {obj['score']}")
-    print("...")
     print("")
