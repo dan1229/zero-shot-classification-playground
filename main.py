@@ -36,17 +36,32 @@ def get_labels_from_file(category="default"):
         return [line.strip() for line in file.readlines()]
 
 
+def print_categories():
+    print("\nAvailable categories:")
+    for category in CATEGORIES:
+        print(f"\t{category}")
+
+
 def get_category_argument(args: argparse.Namespace) -> str:
+    def _ask_for_category():
+        print("\nPlease choose a category for image classification:")
+        print_categories()
+        return input("\nEnter the category: ")
+
     category = args.category
     if category is None:
-        print("Please choose a category for image classification:")
-        print(CATEGORIES)
-        category = input("Enter the category: ")
+        category = _ask_for_category()
     while category not in CATEGORIES:
-        print("Invalid category. Please choose from the following categories:")
-        print(CATEGORIES)
-        category = input("Enter the category: ")
+        print("\nInvalid category. Please choose from the following categories:")
+        category = _ask_for_category()
     return category
+
+
+def get_url_argument(args: argparse.Namespace) -> str:
+    url = args.url
+    if url is None:
+        url = input("Enter the image URL: ")
+    return url
 
 
 if __name__ == "__main__":
@@ -54,16 +69,16 @@ if __name__ == "__main__":
     parser.add_argument(
         "--category", type=str, help="Category for image classification"
     )
+    parser.add_argument("--url", type=str, help="URL of the image to classify")
     args = parser.parse_args()
 
     model_name = "openai/clip-vit-large-patch14-336"
     classifier = pipeline("zero-shot-image-classification", model=model_name)
 
-    url = "https://unsplash.com/photos/g8oS8-82DxI/download?ixid=MnwxMjA3fDB8MXx0b3BpY3x8SnBnNktpZGwtSGt8fHx8fDJ8fDE2NzgxMDYwODc&force=true&w=640"
+    category = get_category_argument(args)
+    url = get_url_argument(args)
 
     image_to_classify = Image.open(requests.get(url, stream=True).raw)
-
-    category = get_category_argument(args)
 
     labels_for_classification = get_labels_from_file(category)
 
@@ -75,3 +90,7 @@ if __name__ == "__main__":
         print(f"{obj['label']}: {obj['score']}")
     print("...")
     print("")
+
+    print(
+        "It is most likely a", scores[0]["label"], "with a score of", scores[0]["score"]
+    )
