@@ -137,30 +137,30 @@ def method_specialized_categories(image_to_classify: str, url: str) -> list:
 
 # Method 2: Processing Different Categories without User Input
 def method_add_different_categories(image_to_classify: str, url: str) -> list:
+    print("\nProcessing different categories without user input...")
     total_labels = 0
-    # Process each category and choose the one with the highest scores
-    highest_score = -1
-    highest_category = None
+    # Process each category and choose the ones with the highest scores
+    top_scores = []
     for category in CATEGORIES:
+        print(f"\tProcessing category: {category}")
         labels_for_classification = get_labels_from_file(category)
         total_labels += len(labels_for_classification)
         scores = classifier(
             image_to_classify, candidate_labels=labels_for_classification
         )
-        max_score_for_category = max(score["score"] for score in scores)
-        if max_score_for_category > highest_score:
-            highest_score = max_score_for_category
-            highest_category = category
+        top_scores.extend(scores[:10])
 
     print(f"Evaluating {total_labels} labels.")
 
     print("\n=============================")
     print(f"Image URL:\n{url}\n")
     print("Processing without user input...")
-    print("Most likely category:", highest_category, "with a score of", highest_score)
+    print("Top 10 scores:")
+    for obj in top_scores[:10]:
+        print(f"{obj['label']}: {obj['score']}")
     print("")
 
-    return scores
+    return top_scores
 
 
 # Method 3: Combine All Text Files and Use for Labels
@@ -194,7 +194,7 @@ def method_combine_all_text_files(image_to_classify: str, url: str) -> list:
 
 # Method 4: Use Category Names as Labels and Refine with X Scored Labels
 def method_use_category_names(image_to_classify: str, url: str) -> list:
-    threshold_score = 0.5  # Example threshold score, adjust as needed
+    threshold_score = 0.2  # Example threshold score, adjust as needed
 
     category_names = [category.lower() for category in CATEGORIES]
 
@@ -205,8 +205,8 @@ def method_use_category_names(image_to_classify: str, url: str) -> list:
     print("Evaluating category names...")
     print("Category names:")
     for obj in scores:
-        print(f"{obj['label']}: {obj['score']}")
-    print("Refining labels...")
+        print(f"\t{obj['label']}: {obj['score']}")
+    print("\nRefining labels...")
 
     refined_labels = []
     for obj in scores:
@@ -223,8 +223,9 @@ def method_use_category_names(image_to_classify: str, url: str) -> list:
 
     print("\nTop predictions after refinement:")
     for obj in scores[:10]:
-        print(f"{obj['label']}: {obj['score']}")
+        print(f"\t{obj['label']}: {obj['score']}")
     print("...")
+    print("")
 
     return scores
 
@@ -265,3 +266,5 @@ if __name__ == "__main__":
     end_time = time.time()
     elapsed_time = end_time - start_time
     print(f"Elapsed time: {elapsed_time} seconds")
+    print(f"URL: {url}")
+    print("")
