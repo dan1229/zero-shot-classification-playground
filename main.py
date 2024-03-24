@@ -3,6 +3,7 @@ from PIL import Image
 import requests
 import os
 import argparse
+import time
 
 # Constants for categories
 CATEGORY_DEFAULT = "default"
@@ -174,7 +175,6 @@ def method_combine_all_text_files(image_to_classify: str, url: str):
 
 #
 # MAIN
-#
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Zero-shot image classification")
     parser.add_argument("--method", type=int, help=f"Method of processing ({METHODS})")
@@ -193,6 +193,8 @@ if __name__ == "__main__":
     url = get_url_argument(args)
     image_to_classify = Image.open(requests.get(url, stream=True).raw)
 
+    start_time = time.time()
+
     if method == METHOD_SPECIALIZED_CATEGORIES:
         method_specialized_categories(image_to_classify, url)
     elif method == METHOD_ADD_DIFFERENT_CATEGORIES:
@@ -201,3 +203,7 @@ if __name__ == "__main__":
         method_combine_all_text_files(image_to_classify, url)
     else:
         print(f"Invalid method selected. Please choose {METHODS}")
+
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    print(f"Elapsed time: {elapsed_time} seconds")
