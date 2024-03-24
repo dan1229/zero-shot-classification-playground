@@ -1,6 +1,4 @@
-import subprocess
-
-from main import METHOD_SPECIALIZED_CATEGORIES, METHODS
+from main import METHODS, classify_image
 
 categories_scores = {}
 categories_times = {}
@@ -15,53 +13,30 @@ TEST_URLS = [
 ]
 
 
-# Function to parse the output and extract the score and elapsed time
-def parse_output(output):
-    lines = output.split("\n")
-    score_line = [line for line in lines if "It is most likely a" in line]
-    time_line = [line for line in lines if "Elapsed time:" in line]
-    score = float(score_line[0].split(" ")[-1]) if score_line else None
-    time_elapsed = float(time_line[0].split(" ")[-2]) if time_line else None
-    return score, time_elapsed
-
-
 if __name__ == "__main__":
 
     # Loop through each test url
-    for url in TEST_URLS:
-        print(f"\nTesting URL: {url}")
+    for index, url in enumerate(TEST_URLS):
+        print("\n=============================")
+        print(f"Test {index + 1}")
+        print(f"Testing URL: {url}\n")
 
         # Loop through each method
         for method in METHODS:
             print(f"\tMethod: {method}")
-            if method == METHOD_SPECIALIZED_CATEGORIES:
+            if method == "Specialized Categories":
                 print("\t\tSkipping method SPECIALIZED_CATEGORIES")
                 continue
-            # Run main.py with the current method
+            # Run classify_image function with the current method
             print(f"\t\tpython main.py --method={method} --url={url}")
-            process = subprocess.Popen(
-                ["python", "main.py", f"--method={method}", f"--url={url}"],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-            )
-            output, _ = process.communicate()
-
-            # Parse the output to extract score and elapsed time
-            score, time_elapsed = parse_output(output)
-
-            # Extract category
-            category_line = [line for line in output.split("\n") if "Category" in line]
-            category = (
-                category_line[0].split(":")[-1].strip() if category_line else None
-            )
+            (scores, time_elapsed, category) = classify_image(url, method)
 
             # Track scores and times for each category
             if category:
                 if category not in categories_scores:
                     categories_scores[category] = {}
                     categories_times[category] = {}
-                categories_scores[category][method] = score
+                categories_scores[category][method] = scores[0]["score"]
                 categories_times[category][method] = time_elapsed
 
         # Find the highest score and elapsed time for each category
@@ -75,6 +50,7 @@ if __name__ == "__main__":
             print(
                 f"Elapsed Time: {categories_times[category][max_score_method[0]]} seconds"
             )
+
     # Print overall stats
     print("\n=============================")
     print("\nOverall Stats:")

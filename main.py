@@ -176,7 +176,6 @@ def method_combine_all_text_files(image_to_classify: str, url: str) -> list:
         all_labels.extend(labels_for_category)
 
     total_labels = len(all_labels)
-    url = get_url_argument(args)
     image_to_classify = Image.open(requests.get(url, stream=True).raw)
 
     scores = classifier(image_to_classify, candidate_labels=all_labels)
@@ -240,16 +239,29 @@ def method_use_category_names(image_to_classify: str, url: str) -> list:
 #
 def classify_image(
     url: str, method: Optional[str] = None, category: Optional[str] = None
-) -> tuple[list, float]:
+) -> tuple[list, float, str]:
+    def _handle_return(scores, category):
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        print("\n=============================")
+        print(f"Elapsed time: {elapsed_time} seconds")
+        print(f"URL: {url}")
+        print("")
+        return (scores, elapsed_time, category)
 
     if method is None:
         method = get_method(None)
     if category is None and method == METHOD_SPECIALIZED_CATEGORIES:
         category = get_category_argument(None)
 
-    image_to_classify = Image.open(requests.get(url, stream=True).raw)
-
     start_time = time.time()
+
+    try:
+        image_to_classify = Image.open(requests.get(url, stream=True).raw)
+    except Exception as e:
+        print(f"Error opening image from URL: {url}")
+        print(e)
+        return _handle_return([], category)
 
     if method == METHOD_SPECIALIZED_CATEGORIES:
         scores = method_specialized_categories(image_to_classify, url)
@@ -262,12 +274,7 @@ def classify_image(
     else:
         print(f"\nInvalid method selected - {method}\n\nPlease choose {METHODS}\n")
 
-    end_time = time.time()
-    elapsed_time = end_time - start_time
-    print(f"Elapsed time: {elapsed_time} seconds")
-    print(f"URL: {url}")
-    print("")
-    return (scores, elapsed_time)
+    return _handle_return(scores, category)
 
 
 if __name__ == "__main__":
