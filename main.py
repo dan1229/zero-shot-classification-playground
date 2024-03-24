@@ -244,9 +244,10 @@ def classify_image(
         end_time = time.time()
         elapsed_time = end_time - start_time
         print("\n=============================")
+        print("Classification complete.")
         print(f"Elapsed time: {elapsed_time} seconds")
         print(f"URL: {url}")
-        print("")
+        print("=============================\n")
         return (scores, elapsed_time, category)
 
     if method is None:
