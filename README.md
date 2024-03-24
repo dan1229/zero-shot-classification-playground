@@ -8,10 +8,15 @@ This repository contains a simple playground for zero-shot classification using 
 - https://huggingface.co/docs/transformers/tasks/zero_shot_image_classification
 
 
-TODO - explain files
-- `basic.py` - TODO
-- `main.py` - TODO
-- `test.py` - TODO
+Some files included in this repository:
+- `basic.py` - The most basic example of using the zero-shot classification pipeline. Hardcoded image and labels.
+- `main.py` - A more advanced example of using the zero-shot classification pipeline. Allows for user input of image and labels as well as methods for label handling.
+- `test.py` - A simple test script to test different label method performance on the zero-shot classification pipeline.
 
 
-TODO - link to blog post
+Blog post coming soon 👀
+- [Daniel Nazarian's Blog](https://blog.danielnazarian.com/)
+
+
+---
+Copyright © 2024 Daniel Nazarian
