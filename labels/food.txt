@@ -1,0 +1,158 @@
+Fruit
+Vegetable
+Meat
+Fish
+Poultry
+Beef
+Chicken
+Pork
+Lamb
+Turkey
+Duck
+Seafood
+Salmon
+Tuna
+Shrimp
+Crab
+Lobster
+Oyster
+Clam
+Mussel
+Scallop
+Octopus
+Squid
+Calamari
+Vegetarian
+Vegan
+Grains
+Rice
+Wheat
+Barley
+Oats
+Corn
+Quinoa
+Millet
+Buckwheat
+Rye
+Legumes
+Beans
+Lentils
+Chickpeas
+Peas
+Soybeans
+Nuts
+Almonds
+Walnuts
+Pecans
+Cashews
+Peanuts
+Hazelnuts
+Macadamia Nuts
+Pistachios
+Brazil Nuts
+Seeds
+Sunflower Seeds
+Pumpkin Seeds
+Chia Seeds
+Flaxseeds
+Sesame Seeds
+Poppy Seeds
+Vegetables
+Broccoli
+Carrots
+Spinach
+Lettuce
+Tomatoes
+Cucumbers
+Bell Peppers
+Onions
+Garlic
+Potatoes
+Sweet Potatoes
+Beets
+Radishes
+Turnips
+Cabbage
+Brussels Sprouts
+Cauliflower
+Kale
+Fruits
+Apple
+Banana
+Orange
+Grapes
+Strawberries
+Blueberries
+Raspberries
+Blackberries
+Peaches
+Plums
+Pears
+Cherries
+Watermelon
+Cantaloupe
+Honeydew Melon
+Pineapple
+Mango
+Papaya
+Kiwi
+Passionfruit
+Avocado
+Lemon
+Lime
+Coconut
+Dates
+Figs
+Prunes
+Raisins
+Apricots
+Cranberries
+Goji Berries
+Dried Fruit
+Dairy
+Milk
+Cheese
+Yogurt
+Butter
+Cream
+Sour Cream
+Cream Cheese
+Ice Cream
+Gelato
+Sherbet
+Frozen Yogurt
+Mozzarella
+Cheddar
+Parmesan
+Provolone
+Swiss
+Brie
+Goat Cheese
+Feta
+Cottage Cheese
+Eggs
+Bread
+Baguette
+Sourdough
+Whole Wheat
+Rye
+Multigrain
+White
+Rolls
+Croissants
+Biscuits
+Muffins
+Pancakes
+Waffles
+French Toast
+Cereal
+Oatmeal
+Granola
+Cereal Bars
+Rice Cakes
+Popcorn
+Crackers
+Pretzels
+Chips
+Trail Mix
+Jerky

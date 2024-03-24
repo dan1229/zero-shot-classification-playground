@@ -1,0 +1,122 @@
+Car
+Truck
+Bus
+Motorcycle
+Bicycle
+Scooter
+Train
+Subway
+Tram
+Light Rail
+Monorail
+High-speed Rail
+Maglev Train
+Airplane
+Helicopter
+Jet
+Propeller Plane
+Glider
+Hot Air Balloon
+Dirigible
+Boat
+Ship
+Yacht
+Ferry
+Canoe
+Kayak
+Raft
+Submarine
+Sailboat
+Catamaran
+Speedboat
+Jet Ski
+Hovercraft
+Tugboat
+Cargo Ship
+Container Ship
+Cruise Ship
+Oil Tanker
+Passenger Plane
+Cargo Plane
+Spacecraft
+Rocket
+Space Shuttle
+Satellite
+Lunar Rover
+Rover
+ATV (All-Terrain Vehicle)
+Snowmobile
+Segway
+Electric Scooter
+Electric Skateboard
+Electric Bicycle
+Electric Car
+Hybrid Car
+Plug-in Hybrid Car
+Fuel Cell Vehicle
+Autonomous Car
+Self-Driving Car
+Caravan
+RV (Recreational Vehicle)
+Camper Van
+Motorhome
+Trailer
+Semi-truck
+Pickup Truck
+Dump Truck
+Garbage Truck
+Fire Truck
+Ambulance
+Police Car
+Taxi
+Limousine
+Van
+Minivan
+Convertible
+Coupe
+Sedan
+Hatchback
+Station Wagon
+SUV (Sports Utility Vehicle)
+Crossover
+Motorcycle
+Chopper
+Cruiser
+Sportbike
+Touring Bike
+Adventure Bike
+Dirt Bike
+Tricycle
+Recumbent Bike
+Pedal Boat
+Rowboat
+Speedboat
+Canoe
+Kayak
+Sailing Ship
+Motor Yacht
+Catamaran
+Jet Ski
+Surfboard
+Windsurfing Board
+Stand-Up Paddleboard
+Water Scooter
+Water Ski
+Parasail
+Paraglider
+Hang Glider
+Kite
+Hovercraft
+Electric Skateboard
+Roller Skates
+Scooter
+Wheelchair
+Bicycle
+Unicycle
+Electric Bike
+Skateboard
+Longboard
+Scooter
+Segway
+Electric Scooter
+Hoverboard
