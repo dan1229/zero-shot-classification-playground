@@ -31,10 +31,12 @@ CATEGORIES = [
 METHOD_SPECIALIZED_CATEGORIES = "Specialized Categories"
 METHOD_ADD_DIFFERENT_CATEGORIES = "Add Different Categories"
 METHOD_COMBINE_ALL_TEXT_FILES = "Combine All Text Files"
+METHOD_USE_CATEGORY_NAMES = "Use Category Names"
 METHODS = [
     METHOD_SPECIALIZED_CATEGORIES,
     METHOD_ADD_DIFFERENT_CATEGORIES,
     METHOD_COMBINE_ALL_TEXT_FILES,
+    METHOD_USE_CATEGORY_NAMES,
 ]
 
 
@@ -178,6 +180,41 @@ def method_combine_all_text_files(image_to_classify: str, url: str):
         "It is most likely a", scores[0]["label"], "with a score of", scores[0]["score"]
     )
     print("")
+
+
+# Method 4: Use Category Names as Labels and Refine with X Scored Labels
+def method_use_category_names(image_to_classify: str, url: str):
+    threshold_score = 0.5  # Example threshold score, adjust as needed
+
+    category_names = [category.lower() for category in CATEGORIES]
+
+    scores = classifier(image_to_classify, candidate_labels=category_names)
+
+    print("\n=============================")
+    print(f"Image URL:\n{url}\n")
+    print("Evaluating category names...")
+    print("Category names:")
+    for obj in scores:
+        print(f"{obj['label']}: {obj['score']}")
+    print("Refining labels...")
+
+    refined_labels = []
+    for obj in scores:
+        if obj["score"] >= threshold_score:
+            category = obj["label"]
+            labels_for_category = get_labels_from_file(category)
+            refined_labels.extend(labels_for_category)
+
+    print(
+        f"Evaluating {len(refined_labels)} refined labels with score >= {threshold_score}."
+    )
+
+    scores = classifier(image_to_classify, candidate_labels=refined_labels)
+
+    print("\nTop predictions after refinement:")
+    for obj in scores[:10]:
+        print(f"{obj['label']}: {obj['score']}")
+    print("...")
 
 
 #
