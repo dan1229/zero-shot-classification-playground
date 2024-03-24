@@ -110,8 +110,9 @@ def get_method(args: argparse.Namespace) -> str:
 # Method 1: Specialized Categories
 def method_specialized_categories(image_to_classify: str, url: str):
     category = get_category_argument(args)
-
     labels_for_classification = get_labels_from_file(category)
+
+    print(f"Evaluating {len(labels_for_classification)} labels.")
 
     scores = classifier(image_to_classify, candidate_labels=labels_for_classification)
 
@@ -120,7 +121,6 @@ def method_specialized_categories(image_to_classify: str, url: str):
     for obj in scores[:10]:
         print(f"{obj['label']}: {obj['score']}")
     print("...")
-    print("")
 
     print(
         "It is most likely a", scores[0]["label"], "with a score of", scores[0]["score"]
@@ -129,11 +129,13 @@ def method_specialized_categories(image_to_classify: str, url: str):
 
 # Method 2: Processing Different Categories without User Input
 def method_add_different_categories(image_to_classify: str, url: str):
+    total_labels = 0
     # Process each category and choose the one with the highest scores
     highest_score = -1
     highest_category = None
     for category in CATEGORIES:
         labels_for_classification = get_labels_from_file(category)
+        total_labels += len(labels_for_classification)
         scores = classifier(
             image_to_classify, candidate_labels=labels_for_classification
         )
@@ -141,6 +143,8 @@ def method_add_different_categories(image_to_classify: str, url: str):
         if max_score_for_category > highest_score:
             highest_score = max_score_for_category
             highest_category = category
+
+    print(f"Evaluating {total_labels} labels.")
 
     print("\n=============================")
     print(f"Image URL:\n{url}\n")
@@ -156,17 +160,20 @@ def method_combine_all_text_files(image_to_classify: str, url: str):
         labels_for_category = get_labels_from_file(category)
         all_labels.extend(labels_for_category)
 
+    total_labels = len(all_labels)
     url = get_url_argument(args)
     image_to_classify = Image.open(requests.get(url, stream=True).raw)
 
     scores = classifier(image_to_classify, candidate_labels=all_labels)
+
+    print(f"Evaluating {total_labels} labels.")
 
     print("\n=============================")
     print(f"Image URL:\n{url}\n")
     for obj in scores[:10]:
         print(f"{obj['label']}: {obj['score']}")
     print("...")
-    print("")
+
     print(
         "It is most likely a", scores[0]["label"], "with a score of", scores[0]["score"]
     )
