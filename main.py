@@ -86,21 +86,25 @@ def get_url_argument(args: argparse.Namespace) -> str:
 # Function to get method argument
 def get_method(args: argparse.Namespace) -> str:
     method = args.method
+    if method is not None:
+        method_input = method
     if method is None:
         print("\nAvailable methods:")
         for i, method_name in enumerate(METHODS, start=1):
             print(f"{i}. {method_name}")
         method_input = input("\nEnter the method name or number: ")
-        try:
-            method_index = int(method_input) - 1
-            if method_index >= 0 and method_index < len(METHODS):
-                method = METHODS[method_index]
-            else:
-                raise ValueError
-        except ValueError:
-            if method_input not in METHODS:
-                print("\nInvalid method. Please choose from the available methods.")
-                method = get_method(args)
+    try:
+        method_index = int(method_input) - 1
+        if method_index >= 0 and method_index < len(METHODS):
+            method = METHODS[method_index]
+        else:
+            raise ValueError
+    except ValueError:
+        if method_input not in METHODS:
+            print("\nInvalid method. Please choose from the available methods.")
+            method = get_method(args)
+        else:
+            method = method_input
     return method
 
 
@@ -110,7 +114,7 @@ def get_method(args: argparse.Namespace) -> str:
 
 
 # Method 1: Specialized Categories
-def method_specialized_categories(image_to_classify: str, url: str):
+def method_specialized_categories(image_to_classify: str, url: str) -> list:
     category = get_category_argument(args)
     labels_for_classification = get_labels_from_file(category)
 
@@ -128,9 +132,11 @@ def method_specialized_categories(image_to_classify: str, url: str):
         "It is most likely a", scores[0]["label"], "with a score of", scores[0]["score"]
     )
 
+    return scores
+
 
 # Method 2: Processing Different Categories without User Input
-def method_add_different_categories(image_to_classify: str, url: str):
+def method_add_different_categories(image_to_classify: str, url: str) -> list:
     total_labels = 0
     # Process each category and choose the one with the highest scores
     highest_score = -1
@@ -154,9 +160,11 @@ def method_add_different_categories(image_to_classify: str, url: str):
     print("Most likely category:", highest_category, "with a score of", highest_score)
     print("")
 
+    return scores
+
 
 # Method 3: Combine All Text Files and Use for Labels
-def method_combine_all_text_files(image_to_classify: str, url: str):
+def method_combine_all_text_files(image_to_classify: str, url: str) -> list:
     all_labels = []
     for category in CATEGORIES:
         labels_for_category = get_labels_from_file(category)
@@ -181,9 +189,11 @@ def method_combine_all_text_files(image_to_classify: str, url: str):
     )
     print("")
 
+    return scores
+
 
 # Method 4: Use Category Names as Labels and Refine with X Scored Labels
-def method_use_category_names(image_to_classify: str, url: str):
+def method_use_category_names(image_to_classify: str, url: str) -> list:
     threshold_score = 0.5  # Example threshold score, adjust as needed
 
     category_names = [category.lower() for category in CATEGORIES]
@@ -216,6 +226,8 @@ def method_use_category_names(image_to_classify: str, url: str):
         print(f"{obj['label']}: {obj['score']}")
     print("...")
 
+    return scores
+
 
 #
 # MAIN
@@ -245,8 +257,10 @@ if __name__ == "__main__":
         method_add_different_categories(image_to_classify, url)
     elif method == METHOD_COMBINE_ALL_TEXT_FILES:
         method_combine_all_text_files(image_to_classify, url)
+    elif method == METHOD_USE_CATEGORY_NAMES:
+        method_use_category_names(image_to_classify, url)
     else:
-        print(f"Invalid method selected. Please choose {METHODS}")
+        print(f"\nInvalid method selected - {method}\n\nPlease choose {METHODS}\n")
 
     end_time = time.time()
     elapsed_time = end_time - start_time
